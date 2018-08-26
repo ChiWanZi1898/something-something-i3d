@@ -120,7 +120,7 @@ class Model:
 
     def valid(self):
         tf.logging.debug('VALIDATING...')
-        for i in range(self.valid_step_per_epoch):
+        for i in range(1, self.valid_step_per_epoch + 1):
             results = self._validate_batch()
             tf.logging.info('VALID: step - {} loss - {}'.format(i, results['top1']))
 
@@ -129,7 +129,7 @@ class Model:
         for _ in range(self.train_step_per_epoch):
             results = self._train_batch()
             global_step = results['global_step']
-            tf.logging.info('TRAIN: step - {} loss - {}'.format(global_step, results['loss']))
-            if global_step % self.valid_interval == 0:
+            tf.logging.info('TRAIN: step - {} loss - {}'.format(global_step + 1, results['loss']))
+            if (global_step + 1) % self.valid_interval == 0:
                 self.valid()
 
