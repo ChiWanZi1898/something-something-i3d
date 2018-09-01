@@ -10,7 +10,7 @@ tf.flags.DEFINE_string('tfrecords_dir', '/Users/aglax/OneDrive/Projects/somethin
 tf.flags.DEFINE_integer('batch_size', 8, 'Batch size.')
 tf.flags.DEFINE_integer('height', 224, 'Height of input video.')
 tf.flags.DEFINE_integer('width', 224, 'Width of input video.')
-tf.flags.DEFINE_integer('length', 25, 'The length of input video.')
+tf.flags.DEFINE_integer('length', 20, 'The length of input video.')
 tf.flags.DEFINE_float('learning_rate', 1e-3, 'Learning rate.')
 tf.flags.DEFINE_integer('train_step_per_epoch', 1000, 'The number of steps in one training epoch.')
 tf.flags.DEFINE_integer('valid_step_per_epoch', 10, 'The number of steps in one validation epoch.')
@@ -38,6 +38,7 @@ def train():
             FLAGS.dropout
         )
         sess.run(tf.global_variables_initializer())
+        model.valid()
         for _ in range(FLAGS.epoch):
             model.train()
 
