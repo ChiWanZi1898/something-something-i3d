@@ -67,7 +67,6 @@ class HighwayCell():
                         name='input_to_state')
                 if self.layer_norm:
                     x_concat = tensor_layer_norm(x_concat, 'input_to_state_tln')
-                # lstm_matrix = tf.add(x_concat, s_concat)
                 h_x, t_x, c_x = tf.split(x_concat, 3, 3)
                 h = tf.add(h, h_x)
                 t = tf.add(t, t_x)
@@ -75,11 +74,5 @@ class HighwayCell():
             h = tf.nn.tanh(h)
             t = tf.nn.sigmoid(t)
             c = tf.nn.sigmoid(c)
-            # h = selu(h)
-            # h = leCunTanh(h)
-            # h = softsign(h)
-            # h = symsigmoid(h)
-            # t = loglog(t)
-            # c = loglog(c)
             new_s = h * t + tf.tanh(new_s) * c
             return new_s

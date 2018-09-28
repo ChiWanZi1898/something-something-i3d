@@ -33,7 +33,6 @@ class Dataset:
     def _get_frames(self, video_id):
 
         video_path = os.path.join(self.data_dir, '{}.webm'.format(video_id))
-        cap = cv2.VideoCapture(video_path)
 
         cap = cv2.VideoCapture(video_path)
         num_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -82,12 +81,12 @@ class Dataset:
             'class_index': tf.FixedLenFeature((), tf.int64, default_value=-1),
             'subclass_index': tf.FixedLenFeature((), tf.int64, default_value=-1),
         }
-        parsed_features = tf.parse_single_example(serial_example, features)
-        frames = tf.py_func(self._get_frames, [parsed_features['id']], tf.uint8)
+        meta = tf.parse_single_example(serial_example, features)
+        frames = tf.py_func(self._get_frames, [meta['id']], tf.uint8)
         frames = tf.cast(frames, dtype=tf.float32)
         frames = frames / 127.5 - 1
         frames = tf.reshape(frames, (self.length, self.height, self.width, 3))
-        return frames, parsed_features['class_index'], parsed_features['subclass_index']
+        return frames, meta
 
     def _get_tfrecords_files(self):
         full_pattern = os.path.join(self.tfrecords_dir, self.tfrecords_pattern)
